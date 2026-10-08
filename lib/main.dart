@@ -222,20 +222,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ---------- Вариант 6: Wrap с картинками из интернета ----------
- Widget _variant6() {
-    const urls = [
-      'https://yapx.ru/album/eQz1V',
-      'https://yapx.ru/album/eQz2T',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/240px-Gull_portrait_ca_usa.jpg',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/240px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/240px-Good_Food_Display_-_NCI_Visuals_Online.jpg',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedSunrise01.jpg/240px-RedSunrise01.jpg',
-    ];
-    return Center(
+Widget _variant6() {
+  const urls = [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/240px-Gull_portrait_ca_usa.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Tour_Eiffel_Wikimedia_Commons_(cropped).jpg/240px-Tour_Eiffel_Wikimedia_Commons_(cropped).jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/240px-Good_Food_Display_-_NCI_Visuals_Online.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedSunrise01.jpg/240px-RedSunrise01.jpg',
+    'https://picsum.photos/240',
+    'https://picsum.photos/seed/flutter/240',
+  ];
+
+  return Center(
+    child: SingleChildScrollView(
       child: Wrap(
         spacing: 8.0,
         runSpacing: 8.0,
-        children: List.generate(6, (index) {
+        children: List.generate(urls.length, (index) {
           return Container(
             margin: const EdgeInsets.all(8.0),
             width: 120,
@@ -249,6 +251,14 @@ class _HomePageState extends State<HomePage> {
               child: Image.network(
                 urls[index],
                 fit: BoxFit.cover,
+                loadingBuilder: (_, child, progress) =>
+                    progress == null ? child : const Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
                 errorBuilder: (_, __, ___) =>
                     const Icon(Icons.image_not_supported),
               ),
@@ -256,8 +266,9 @@ class _HomePageState extends State<HomePage> {
           );
         }),
       ),
-    );
-  }
+    ),
+  );
+}
 
   // ---------- Вариант 7: Column с картинками из ассетов ----------
   // Нужны файлы assets/image1.jpg ... image5.jpg и блок assets: в pubspec.yaml
