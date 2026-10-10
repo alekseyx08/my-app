@@ -1,415 +1,474 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
+      home: MyHomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _variant = 1;
-
-  static const _names = {
-    1: 'Вариант 1: Wrap с контейнерами',
-    2: 'Вариант 2: Column с текстом о себе',
-    3: 'Вариант 3: Column с Row из иконок',
-    4: 'Вариант 4: Stack с радугой',
-    5: 'Вариант 5: Wrap с текстами',
-    6: 'Вариант 6: Wrap с картинками',
-    7: 'Вариант 7: Column с ассетами',
-    8: 'Вариант 8: Stack по углам',
-    9: 'Вариант 9: Wrap с иконками',
-    10: 'Вариант 10: Column с Row картинок',
-  };
-
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Холхонов Алексей Викторович'),
-        actions: [
-          DropdownButton<int>(
-            value: _variant,
-            dropdownColor: Colors.white,
-            items: _names.keys
-                .map((v) => DropdownMenuItem(
-                      value: v,
-                      child: Text(_names[v]!),
-                    ))
-                .toList(),
-            onChanged: (v) {
-              if (v != null) setState(() => _variant = v);
-            },
+    final theme = Theme.of(context);
+    return DefaultTabController(
+      length: 10,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Холхонов А.В. — Лабораторная работа2',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(width: 12),
-        ],
-      ),
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    switch (_variant) {
-      case 1:
-        return _variant1();
-      case 2:
-        return _variant2();
-      case 3:
-        return _variant3();
-      case 4:
-        return _variant4();
-      case 5:
-        return _variant5();
-      case 6:
-        return _variant6();
-      case 7:
-        return _variant7();
-      case 8:
-        return _variant8();
-      case 9:
-        return _variant9();
-      case 10:
-        return _variant10();
-      default:
-        return const SizedBox();
-    }
-  }
-
-  // ---------- Вариант 1: Wrap, контейнеры с размером, цветом и отступом ----------
-  Widget _variant1() {
-    return Center(
-      child: Wrap(
-        spacing: 8.0,
-        runSpacing: 8.0,
-        children: List.generate(6, (index) {
-          return Container(
-            width: 100,
-            height: 100,
-            margin: const EdgeInsets.all(8.0),
-            color: Colors.primaries[index % Colors.primaries.length],
-            child: Center(child: Text('Контейнер $index')),
-          );
-        }),
-      ),
-    );
-  }
-
-  // ---------- Вариант 2: Column, сведения о себе со стилями и отступами ----------
-  Widget _variant2() {
-    Widget line(String text) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
-            ),
+          centerTitle: true,
+          backgroundColor: theme.colorScheme.primaryContainer,
+          bottom: TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.center,
+            tabs: List.generate(10, (i) => Tab(text: 'Вариант ${i + 1}')),
           ),
-        );
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          line('ФИО: Холхонов Алексей Викторович'),
-          line('Год рождения: 1989'),
-          line('Группа: зИСТУ-23'),
-          line('Университет: ЧИ БГУ'),
-        ],
-      ),
-    );
-  }
-
-  // ---------- Вариант 3: Column с Row иконок, выравнивание по ширине ----------
-  Widget _variant3() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Icon(Icons.star, color: Colors.amber, size: 40),
-              Icon(Icons.favorite, color: Colors.red, size: 40),
-              Icon(Icons.home, color: Colors.blue, size: 40),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.music_note, color: Colors.purple, size: 40),
-              Icon(Icons.camera_alt, color: Colors.green, size: 40),
-              Icon(Icons.phone, color: Colors.orange, size: 40),
-              Icon(Icons.email, color: Colors.teal, size: 40),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Icon(Icons.pets, color: Colors.brown, size: 40),
-              Icon(Icons.flight, color: Colors.indigo, size: 40),
-              Icon(Icons.sunny, color: Colors.deepOrange, size: 40),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ---------- Вариант 4: Stack с цветами радуги, всё по центру ----------
-    Widget _variant4() {
-    return Center(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(width: 250, height: 250, color: Colors.red),
-          Container(width: 210, height: 210, color: Colors.orange),
-          Container(width: 170, height: 170, color: Colors.yellow),
-          Container(width: 130, height: 130, color: Colors.green),
-          Container(width: 90, height: 90, color: Colors.blue),
-          Container(width: 50, height: 50, color: Colors.indigo),
-          Container(width: 25, height: 25, color: Colors.purple),
-        ],
-      ),
-    );
-  }
-
-
-  // ---------- Вариант 5: Wrap с контейнерами-текстами о себе ----------
-  Widget _variant5() {
-    Widget info(String text, Color color) => Container(
-          padding: const EdgeInsets.all(16.0),
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(text, style: const TextStyle(fontSize: 18)),
-        );
-
-    return Center(
-      child: Wrap(
-        spacing: 8.0,
-        runSpacing: 8.0,
-        children: [
-          info('ФИО: Холхонов Алексей Викторович', Colors.amber),
-          info('Год рождения: 1989', Colors.lightGreen),
-          info('Группа: зИСТУ-23', Colors.lightBlue),
-          info('Город: Чита', Colors.pinkAccent),
-        ],
-      ),
-    );
-  }
-
-  // ---------- Вариант 6: Wrap с картинками из интернета ----------
-Widget _variant6() {
-  const urls = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/240px-Gull_portrait_ca_usa.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Tour_Eiffel_Wikimedia_Commons_(cropped).jpg/240px-Tour_Eiffel_Wikimedia_Commons_(cropped).jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/240px-Good_Food_Display_-_NCI_Visuals_Online.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedSunrise01.jpg/240px-RedSunrise01.jpg',
-    'https://picsum.photos/240',
-    'https://picsum.photos/seed/flutter/240',
-  ];
-
-  return Center(
-    child: SingleChildScrollView(
-      child: Wrap(
-        spacing: 8.0,
-        runSpacing: 8.0,
-        children: List.generate(urls.length, (index) {
-          return Container(
-            margin: const EdgeInsets.all(8.0),
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                urls[index],
-                fit: BoxFit.cover,
-                loadingBuilder: (_, child, progress) =>
-                    progress == null ? child : const Center(
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.image_not_supported),
-              ),
-            ),
-          );
-        }),
-      ),
-    ),
-  );
-}
-
-  // ---------- Вариант 7: Column с картинками из ассетов ----------
-  // Нужны файлы assets/image1.jpg ... image5.jpg и блок assets: в pubspec.yaml
-  Widget _variant7() {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(5, (index) {
-            return Container(
-              margin: const EdgeInsets.all(8.0),
-              width: 200,
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.shade300,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  'assets/image${index + 1}.jpg',
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.broken_image),
-                ),
-              ),
-            );
-          }),
         ),
-      ),
-    );
-  }
-
-  // ---------- Вариант 8: Stack, контейнеры по углам ----------
-  Widget _variant8() {
-    return Center(
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: Stack(
+        body: TabBarView(
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(width: 100, height: 100, color: Colors.red),
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(width: 100, height: 100, color: Colors.green),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Container(width: 100, height: 100, color: Colors.blue),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(width: 100, height: 100, color: Colors.orange),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(width: 60, height: 60, color: Colors.purple),
-            ),
+            _Page(t: '1. Wrap сетка', c: _V1()),
+            _Page(t: '2. Column сведения', c: _V2(theme)),
+            _Page(t: '3. Row с иконками', c: _V3()),
+            _Page(t: '4. Радужный Stack', c: _V4()),
+            _Page(t: '5. Wrap сведения', c: _V5(theme)),
+            _Page(t: '6. Сетевые фото Wrap', c: _V6()),
+            _Page(t: '7. Ассеты в Column', c: _V7()),
+            _Page(t: '8. Stack по углам', c: _V8(theme)),
+            _Page(t: '9. Сетка иконок Wrap', c: _V9()),
+            _Page(t: '10. Ряды Network фото', c: _V10()),
           ],
         ),
       ),
     );
   }
+}
 
-  // ---------- Вариант 9: Wrap с контейнерами и иконками ----------
-  Widget _variant9() {
-    const icons = [
-      Icons.star,
-      Icons.favorite,
-      Icons.home,
-      Icons.music_note,
-      Icons.camera_alt,
-      Icons.phone,
-    ];
-    return Center(
-      child: Wrap(
-        spacing: 8.0,
-        runSpacing: 8.0,
-        children: List.generate(6, (index) {
-          return Container(
-            width: 100,
-            height: 100,
-            margin: const EdgeInsets.all(8.0),
-            color: Colors.primaries[index % Colors.primaries.length],
-            child: Icon(icons[index], color: Colors.white, size: 48),
-          );
-        }),
-      ),
-    );
-  }
-
-  // ---------- Вариант 10: Column с Row контейнеров-картинок ----------
-  Widget _variant10() {
-    Widget pic(String url) => Container(
-          margin: const EdgeInsets.all(4.0),
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey.shade300,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              url,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) =>
-                  const Icon(Icons.image_not_supported),
+class _Page extends StatelessWidget {
+  final String t;
+  final Widget c;
+  const _Page({required this.t, required this.c});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Text(
+            t,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
-        );
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              pic('https://picsum.photos/seed/a1/100/100'),
-              pic('https://picsum.photos/seed/a2/100/100'),
-              pic('https://picsum.photos/seed/a3/100/100'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              pic('https://picsum.photos/seed/b1/100/100'),
-              pic('https://picsum.photos/seed/b2/100/100'),
-              pic('https://picsum.photos/seed/b3/100/100'),
-            ],
+          SizedBox(height: 16),
+          Expanded(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: c),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 }
+
+class _V1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
+      children: List.generate(
+        6,
+        (i) => Container(
+          width: 85,
+          height: 85,
+          decoration: BoxDecoration(
+            color: Colors.primaries[i % Colors.primaries.length],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(child: Text(' ${i + 1}')),
+        ),
+      ),
+    );
+  }
+}
+
+class _V2 extends StatelessWidget {
+  final ThemeData theme;
+  const _V2(this.theme);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'ФИО: Холхонов Алексей Викторович',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        SizedBox(height: 10),
+        Text(
+          'Год рождения: 1989 г.',
+          style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
+        ),
+        SizedBox(height: 10),
+        Text(
+          'Группа: зИСТУ-23',
+          style: TextStyle(fontSize: 18, color: theme.colorScheme.secondary),
+        ),
+      ],
+    );
+  }
+}
+
+class _V3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(Icons.star, size: 40, color: Colors.amber),
+            Icon(Icons.favorite, size: 40, color: Colors.red),
+            Icon(Icons.home, size: 40, color: Colors.blue),
+          ],
+        ),
+        SizedBox(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(Icons.person, size: 40, color: Colors.green),
+            Icon(Icons.settings, size: 40, color: Colors.orange),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _V4 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 220,
+          height: 230,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(32),
+          ),
+        ),
+        Container(
+          width: 170,
+          height: 180,
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
+        Container(
+          width: 120,
+          height: 130,
+          decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        Container(
+          width: 70,
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        Icon(Icons.bolt, color: Colors.white, size: 32),
+      ],
+    );
+  }
+}
+
+class _V5 extends StatelessWidget {
+  final ThemeData theme;
+  const _V5(this.theme);
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primaryContainer,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            'ФИО: Холхонов А.В.',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.secondaryContainer,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text('Год: 1989'),
+        ),
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.tertiaryContainer,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text('Группа: зИСТУ-23'),
+        ),
+      ],
+    );
+  }
+}
+
+class _V6 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
+      children: List.generate(
+        4,
+        (i) => Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(
+              // Исправлено: добавлен слэш перед id
+              image: NetworkImage(
+                'https://avatars.mds.yandex.net/i?id=ad65cb4fea6ea6fb6f7ff1d70f08c28b_l-12394646-images-thumbs&n=13{(i + 1) * 10}/150/150',
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _V7 extends StatelessWidget {
+  const _V7({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Список красивых системных иконок, которые имитируют фотографии
+    final mockPhotos = [
+      {'title': 'Горы', 'icon': Icons.landscape, 'color': Colors.teal},
+      {'title': 'Лес', 'icon': Icons.forest, 'color': Colors.green},
+      {'title': 'Солнце', 'icon': Icons.wb_sunny, 'color': Colors.orange},
+      {'title': 'Пляж', 'icon': Icons.beach_access, 'color': Colors.blue},
+    ];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(4, (i) => Padding(
+        padding: EdgeInsets.symmetric(vertical: 6.0),
+        child: Container(
+          width: 250,
+          height: 60,
+          decoration: BoxDecoration(
+            color: (mockPhotos[i]['color'] as Color).withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: (mockPhotos[i]['color'] as Color).withOpacity(0.4)),
+          ),
+          child: ListTile(
+            // Вместо проблемного Image.asset выводим красивую цветную иконку
+            leading: CircleAvatar(
+              backgroundColor: (mockPhotos[i]['color'] as Color).withOpacity(0.2),
+              child: Icon(
+                mockPhotos[i]['icon'] as IconData, 
+                color: mockPhotos[i]['color'] as Color,
+                size: 24,
+              ),
+            ),
+            title: Text(
+              mockPhotos[i]['title'] as String, 
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text(
+              '', 
+              style: const TextStyle(fontSize: 11, color: Colors.grey),
+            ),
+          ),
+        ),
+      )),
+    );
+  }
+}
+
+
+class _V8 extends StatelessWidget {
+  final ThemeData theme;
+  const _V8(this.theme, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 230,
+      height: 230,
+      decoration: BoxDecoration(
+        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        children: [
+          Positioned(top: 10, left: 10, child: Container(width: 55, height: 55, decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)))),
+          Positioned(top: 10, right: 10, child: Container(width: 55, height: 55, decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(8)))),
+          Positioned(bottom: 10, left: 10, child: Container(width: 55, height: 55, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(8)))),
+          Positioned(bottom: 10, right: 10, child: Container(width: 55, height: 55, decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(8)))),
+        ],
+      ),
+    );
+  }
+}
+
+class _V9 extends StatelessWidget {
+  const _V9({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final icons = [
+      Icons.star, 
+      Icons.home, 
+      Icons.favorite, 
+      Icons.person, 
+      Icons.settings, 
+      Icons.phone
+    ];
+
+    // Добавляем список ярких цветов для каждой иконки по порядку
+    final iconColors = [
+      Colors.amber,       // Звезда — Желтый
+      Colors.lightBlue,   // Дом — Голубой
+      Colors.redAccent,   // Сердце — Красный
+      Colors.greenAccent, // Профиль — Зеленый
+      Colors.orange,      // Настройки — Оранжевый
+      Colors.purpleAccent // Телефон — Фиолетовый
+    ];
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      alignment: WrapAlignment.center,
+      children: List.generate(
+        6,
+        (i) => Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            // Сделаем фон контейнеров чуть темнее, чтобы цветные иконки смотрелись контрастно
+            color: const Color(0xFF2E3B4E), 
+            borderRadius: BorderRadius.circular(16),
+            // Добавим тонкую рамку в цвет иконки для еще более красивого вида
+            border: Border.all(color: iconColors[i].withOpacity(0.3), width: 1.5),
+          ),
+          child: Icon(
+            icons[i], 
+            size: 36, 
+            color: iconColors[i], // ИСПРАВЛЕНО: Теперь цвет берется из нашего списка
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class _V10 extends StatelessWidget {
+  const _V10({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // ИСПРАВЛЕНО: Добавлены разделы /id/... и размеры в пикселях для каждой картинки
+            Container(
+              width: 85, 
+              height: 85, 
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), 
+                image: DecorationImage(
+                  image: NetworkImage('https://avatars.mds.yandex.net/i?id=983d612f6b46761a69b9db42c479d4cbcceb0427-4119111-images-thumbs&n=13'), 
+                  fit: BoxFit.cover
+                )
+              )
+            ),
+            Container(
+              width: 85, 
+              height: 85, 
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), 
+                image: DecorationImage(
+                  image: NetworkImage('https://avatars.mds.yandex.net/i?id=3a788c153ec300ec1c03df62ab1b20d529db85e0-6437475-images-thumbs&n=13'), 
+                  fit: BoxFit.cover
+                )
+              )
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 85, 
+              height: 85, 
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), 
+                image: DecorationImage(
+                  image: NetworkImage('https://avatars.mds.yandex.net/i?id=b261d9dc0c5f1a4a4c45323abacea660539cec36-9051244-images-thumbs&n=13'), 
+                  fit: BoxFit.cover
+                )
+              )
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
